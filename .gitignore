@@ -1,1 +1,4 @@
 *check*
+#directories
+venv/
+.ipynb_checkpoints
