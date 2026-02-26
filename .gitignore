@@ -1,2 +1,6 @@
 .ipynb_checkpoints
+<<<<<<< HEAD
 venv/
+=======
+project_dataset.csv
+>>>>>>> 8e01c32cef609bae06a9508a20bb3052ffc032ae
