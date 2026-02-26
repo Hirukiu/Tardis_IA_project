@@ -6,8 +6,6 @@ import seaborn as sns
 # Configuration de la page
 st.set_page_config(page_title="TARDIS Dashboard")
 
-#empeche les refreshs
-@st.cache_data
 
 #recupere les donnée du fichier cdv et le met dans df
 def load_data():
@@ -54,7 +52,7 @@ try:
 
     st.markdown("---")
 
-    # 3. prediction des retards
+    # prediction des retards
     st.header(" Prédiction des retard")
     
     #formulaire 
