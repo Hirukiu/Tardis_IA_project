@@ -10,7 +10,8 @@ st.set_page_config(page_title="TARDIS Dashboard")
 
 def load_data():
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    return pd.read_csv(os.path.join(base_dir, 'cleaned_dataset.csv'))
+    return pd.read_csv(os.path.join(base_dir, "cleaned_dataset.csv"))
+
 
 try:
     df = load_data()
@@ -33,7 +34,13 @@ try:
     st.header("Distribution des Retards")
     st.write("Analyse du retard moyen des trains qui sont arrivés en retard :")
     fig, ax = plt.subplots(figsize=(10, 4))
-    sns.histplot(df["Retard moyen des trains en retard à l'arrivée"], bins=30, kde=True, ax=ax, color="#1f77b4")
+    sns.histplot(
+        df["Retard moyen des trains en retard à l'arrivée"],
+        bins=30,
+        kde=True,
+        ax=ax,
+        color="#1f77b4",
+    )
     ax.set_title("Répartition des retards à l'arrivée")
     ax.set_xlabel("Minutes de retard")
     ax.set_ylabel("Fréquence")
@@ -44,7 +51,7 @@ try:
     st.header("Prédiction des retards")
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    label_encoders = joblib.load(os.path.join(base_dir, 'label_encoders.joblib'))
+    label_encoders = joblib.load(os.path.join(base_dir, "label_encoders.joblib"))
 
     services = sorted(df["Service"].dropna().unique().tolist())
     gares_depart = sorted(df["Gare de départ"].dropna().unique().tolist())
@@ -54,14 +61,32 @@ try:
         st.write("Entrez les paramètres du trajet :")
         col1, col2, col3 = st.columns(3)
         with col1:
-            annee = st.selectbox("Année", sorted(df["Annee"].dropna().unique().tolist(), reverse=True))
-            mois = st.selectbox("Mois", list(range(1, 13)), format_func=lambda x: [
-                "Janvier","Février","Mars","Avril","Mai","Juin",
-                "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-            ][x-1])
+            annee = st.selectbox(
+                "Année", sorted(df["Annee"].dropna().unique().tolist(), reverse=True)
+            )
+            mois = st.selectbox(
+                "Mois",
+                list(range(1, 13)),
+                format_func=lambda x: [
+                    "Janvier",
+                    "Février",
+                    "Mars",
+                    "Avril",
+                    "Mai",
+                    "Juin",
+                    "Juillet",
+                    "Août",
+                    "Septembre",
+                    "Octobre",
+                    "Novembre",
+                    "Décembre",
+                ][x - 1],
+            )
         with col2:
             service = st.selectbox("Service", services)
-            duree = st.number_input("Durée moyenne du trajet (min)", min_value=1, max_value=600, value=90)
+            duree = st.number_input(
+                "Durée moyenne du trajet (min)", min_value=1, max_value=600, value=90
+            )
         with col3:
             gare_depart = st.selectbox("Gare de départ", gares_depart)
             gare_arrivee = st.selectbox("Gare d'arrivée", gares_arrivee)
@@ -71,17 +96,21 @@ try:
 
     if submit:
         try:
-            model = joblib.load(os.path.join(base_dir, 'model.joblib'))
+            model = joblib.load(os.path.join(base_dir, "model.joblib"))
 
-            input_data = pd.DataFrame([{
-                "Annee": annee,
-                "Mois": mois,
-                "Service": str(service),
-                "Gare de départ": str(gare_depart),
-                "Gare d'arrivée": str(gare_arrivee),
-                "Durée moyenne du trajet": duree,
-                "Nombre de circulations prévues": circulations
-            }])
+            input_data = pd.DataFrame(
+                [
+                    {
+                        "Annee": annee,
+                        "Mois": mois,
+                        "Service": str(service),
+                        "Gare de départ": str(gare_depart),
+                        "Gare d'arrivée": str(gare_arrivee),
+                        "Durée moyenne du trajet": duree,
+                        "Nombre de circulations prévues": circulations,
+                    }
+                ]
+            )
 
             for col in ["Service", "Gare de départ", "Gare d'arrivée"]:
                 input_data[col] = label_encoders[col].transform(input_data[col])
@@ -121,7 +150,7 @@ try:
             ax.bar(labels, values, color=colors)
             ax.set_ylabel("Nombre de trains")
             ax.set_title("Répartition des retards prédits")
-            plt.xticks(rotation=15, ha='right')
+            plt.xticks(rotation=15, ha="right")
             st.pyplot(fig)
 
         except Exception as e:
