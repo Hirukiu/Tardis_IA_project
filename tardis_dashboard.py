@@ -7,6 +7,7 @@ import os
 
 st.set_page_config(page_title="TARDIS Dashboard")
 
+
 def load_data():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     return pd.read_csv(os.path.join(base_dir, 'cleaned_dataset.csv'))
