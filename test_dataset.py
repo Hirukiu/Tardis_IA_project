@@ -1,18 +1,15 @@
 import pandas as pd
 
-df = pd.read_csv("ton_fichier.csv")
+df = pd.read_csv("cleaned_dataset.csv")
 
-# ─── Colonnes à vérifier ──────────────────────────────────────────
 cols_to_check = ["Gare d'arrivée", "Gare de départ", "Date"]  # adapte cette liste
 
-# ─── Test 1 : Doublons ───────────────────────────────────────────
 duplicates = df.duplicated()
 if duplicates.any():
     print(f"KO: Duplicates found in cleaned dataset. ({duplicates.sum()} doublon(s))")
 else:
     print("OK: No duplicates found.")
 
-# ─── Test 2 : Valeurs manquantes (colonnes ciblées seulement) ────
 missing = df[cols_to_check].isnull().sum()
 cols_with_missing = missing[missing > 0]
 
