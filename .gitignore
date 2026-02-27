@@ -3,3 +3,4 @@ venv/
 *venv/
 project_dataset.csv
 __*
+.ipynb_checkpoints/
